@@ -64,14 +64,15 @@ function testNotification() {
         const notification = new Notification("Hi there!");
         console.log('just given perm:', notification);
          alert('just given perm')
+      } else {
+        console.log('not given perm');
+        alert('not given perm')
       }
     });
   }
 
   // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them anymore.
-  console.log('not given perm');
-  alert('not given perm')
 }
 
 </script>
