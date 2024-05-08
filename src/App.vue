@@ -46,12 +46,42 @@ function getFCMToken() {
   });
 }
 
+function testNotification() {
+  if (!("Notification" in window)) {
+    // Check if the browser supports notifications
+    alert("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    // Check whether notification permissions have already been granted;
+    // if so, create a notification
+    const notification = new Notification("Hi there!");
+    // …
+    console.log('already given perm:', notification);
+  } else if (Notification.permission !== "denied") {
+    // We need to ask the user for permission
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        const notification = new Notification("Hi there!");
+        console.log('just given perm:', notification);
+         alert('just given perm')
+      }
+    });
+  }
+
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them anymore.
+  console.log('not given perm');
+  alert('not given perm')
+}
+
 </script>
 
 <template>
   <div>
     <HelloWorld msg="FIT Push Notification" />
     <button @click="getFCMToken">Get Token</button>
+    <br>
+    <button @click="testNotification">Sample notification</button>
     <p>TOKEN</p>
     <p>{{token}}</p>
   </div>
