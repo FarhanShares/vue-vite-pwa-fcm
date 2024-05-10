@@ -39,9 +39,42 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration
     .showNotification(notificationTitle, notificationOptions)
-    .then((notification) => {
-      notification.addEventListener('notificationclick', () => {
-        window.open('https://follow.it', '_blank')
-      })
+    .then(() => {
+      // notification.addEventListener('notificationclick', () => {
+      //   window.open('https://follow.it', '_blank')
+      // })
     })
+
+  // self.addEventListener('notificationclick', function (event) {
+  //   console.log('on click notification', event)
+  //   window.open('https://follow.it', '_blank')
+  //   // event.notification.close()
+  //   // event.waitUntil(clients.openWindow('https://follow.it'))
+  // })
+
+  // Notification click event listener
+  self.addEventListener('notificationclick', (e) => {
+    console.log('on click notification', e)
+    const url = 'https://follow.it'
+    // Close the notification popout
+    e.notification.close()
+    // Get all the Window clients
+    e.waitUntil(
+      clients.matchAll({ type: 'window' }).then((clientsArr) => {
+        // If a Window tab matching the targeted URL already exists, focus that;
+        const hadWindowToFocus = clientsArr.some((windowClient) =>
+          // windowClient.url === e.notification.data.url
+          windowClient.url === url ? (windowClient.focus(), true) : false
+        )
+        // Otherwise, open a new tab to the applicable URL and focus it.
+        if (!hadWindowToFocus)
+          clients
+            // .openWindow(e.notification.data.url)
+            .openWindow(url)
+            .then((windowClient) =>
+              windowClient ? windowClient.focus() : null
+            )
+      })
+    )
+  })
 })
