@@ -37,5 +37,11 @@ messaging.onBackgroundMessage((payload) => {
     // icon: '/favicon-32x32.png',
   }
 
-  self.registration.showNotification(notificationTitle, notificationOptions)
+  self.registration
+    .showNotification(notificationTitle, notificationOptions)
+    .then((notification) => {
+      notification.addEventListener('notificationclick', () => {
+        window.open('https://follow.it', '_blank')
+      })
+    })
 })
